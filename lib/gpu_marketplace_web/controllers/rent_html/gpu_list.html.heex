@@ -16,9 +16,9 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<%= gpu.price_per_hour %></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <.simple_form :let={f} for={%{}} action={~p"/rent/#{gpu.id}"} method="post">
-              <.input field={f[:duration]} type="number" label="Duration (minutes)" required />
+              <.input field={f[:duration]} type="number" label="Duration (minutes)" required min="1" />
               <:actions>
-                <.button>Rent</.button>
+                <.button type="submit" phx-disable-with="Renting...">Rent</.button>
               </:actions>
             </.simple_form>
           </td>

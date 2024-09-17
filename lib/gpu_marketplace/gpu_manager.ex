@@ -42,7 +42,7 @@ defmodule GpuMarketplace.GpuManager do
         {:error, :not_found}
       gpu ->
         if gpu.status == :available do
-          total_cost = Decimal.mult(gpu.price_per_hour, Decimal.div(duration, 60))
+          total_cost = Decimal.mult(gpu.price_per_hour, Decimal.div(Decimal.new(duration), 60))
           rental = %{
             gpu: gpu,
             duration: duration,
