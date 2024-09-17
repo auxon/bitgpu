@@ -37,7 +37,6 @@ defmodule GpuMarketplaceWeb.Router do
     post "/upload-training-data", TrainingDataController, :upload
 
     # Add this to your :browser scope
-    resources "/rent", RentController, only: [:index]
     post "/rent/:id", RentController, :rent
 
     live "/task-status", TaskStatusLive
@@ -56,6 +55,7 @@ defmodule GpuMarketplaceWeb.Router do
     # ... (existing routes)
     resources "/ml_tasks", MLTaskController, only: [:create, :show]
     get "/ml_tasks/:id/result", MLTaskController, :result
+    post "/ml_tasks/submit", MLTaskController, :submit
   end
 
   scope "/api/swagger" do

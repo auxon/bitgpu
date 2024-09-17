@@ -11,8 +11,8 @@ defmodule GpuMarketplace.P2PManager do
     {:ok, %{connections: %{}}}
   end
 
-  def submit_task(task) do
-    GenServer.cast(__MODULE__, {:submit_task, task})
+  def submit_task(gpu_id, task) do
+    GenServer.cast(__MODULE__, {:submit_task, gpu_id, task})
   end
 
   def handle_cast({:submit_task, gpu_id, task}, state) do
@@ -40,6 +40,16 @@ defmodule GpuMarketplace.P2PManager do
 
   def handle_info({:task_completed, task}, state) do
     MLTasks.update_task(task, %{status: "completed", result: "Mock result"})
+    {:noreply, state}
+  end
+
+  def update_task_result(task_id, result) do
+    GenServer.cast(__MODULE__, {:update_task_result, task_id, result})
+  end
+
+  def handle_cast({:update_task_result, task_id, result}, state) do
+    task = MLTasks.get_task!(task_id)
+    MLTasks.update_task(task, %{status: "completed", result: result})
     {:noreply, state}
   end
 end

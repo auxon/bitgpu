@@ -3,10 +3,9 @@ defmodule GpuNode.TaskExecutor do
 
   def execute_task(task) do
     try do
-      # Here you would implement the actual GPU computation
-      # For now, we'll simulate it with a sleep
+      # Simulate GPU computation
       :timer.sleep(5000)
-      result = %{status: "completed", output: "Simulated GPU computation result"}
+      result = %{status: "completed", output: "Simulated GPU computation result for task #{task.id}"}
       {:ok, result}
     rescue
       e ->
