@@ -2,6 +2,7 @@ defmodule GpuMarketplace.MLTasks.Task do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :status, :gpu_id, :result, :inserted_at, :updated_at]}
   schema "ml_tasks" do
     field :status, :string
     field :gpu_id, :string
