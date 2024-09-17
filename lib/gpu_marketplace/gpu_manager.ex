@@ -60,13 +60,19 @@ defmodule GpuMarketplace.GpuManager do
 
   @impl true
   def init(_) do
+    Logger.info("GpuManager initializing")
+    {:ok, %{gpus: []}, {:continue, :load_gpus}}
+  end
+
+  @impl true
+  def handle_continue(:load_gpus, _state) do
     case Gpus.list_available_gpus() do
       {:ok, gpus} ->
-        Logger.info("GpuManager initializing with GPUs: #{inspect(gpus)}")
-        {:ok, %{gpus: gpus}}
+        Logger.info("GpuManager loaded GPUs: #{inspect(gpus)}")
+        {:noreply, %{gpus: gpus}}
       {:error, reason} ->
-        Logger.error("Failed to initialize GpuManager: #{inspect(reason)}")
-        {:ok, %{gpus: []}}
+        Logger.error("Failed to load GPUs: #{inspect(reason)}")
+        {:noreply, %{gpus: []}}
     end
   end
 

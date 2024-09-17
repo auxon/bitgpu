@@ -9,7 +9,8 @@ defmodule GpuMarketplace.Application do
       GpuMarketplaceWeb.Telemetry,
       {Phoenix.PubSub, name: GpuMarketplace.PubSub},
       GpuMarketplaceWeb.Endpoint,
-      {GpuMarketplace.P2PManager, []}
+      {GpuMarketplace.P2PManager, []},
+      {GpuMarketplace.GpuManager, []}  # Add this line
     ]
 
     opts = [strategy: :one_for_one, name: GpuMarketplace.Supervisor]

@@ -5,64 +5,6 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "TrainingResponse": {
-      "description": "Response schema for the training process",
-      "properties": {
-        "loss": {
-          "description": "Final loss value",
-          "type": "number"
-        },
-        "losses": {
-          "description": "List of loss values per epoch",
-          "items": "number",
-          "type": "array"
-        },
-        "message": {
-          "description": "Status message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "losses",
-        "loss",
-        "message"
-      ],
-      "title": "Training Response",
-      "type": "object"
-    },
-    "EvaluationResults": {
-      "description": "Results of model evaluation",
-      "properties": {
-        "loss": {
-          "description": "Evaluation loss",
-          "type": "number"
-        },
-        "message": {
-          "description": "Status message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "loss",
-        "message"
-      ],
-      "title": "Evaluation Results",
-      "type": "object"
-    },
-    "ApiHomeResponse": {
-      "description": "Response schema for the API home endpoint",
-      "properties": {
-        "message": {
-          "description": "Welcome message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "message"
-      ],
-      "title": "API Home Response",
-      "type": "object"
-    },
     "RentalResponse": {
       "description": "Response for a successful GPU rental",
       "properties": {
@@ -133,6 +75,64 @@
         "model"
       ],
       "title": "GPU Parameters",
+      "type": "object"
+    },
+    "ApiHomeResponse": {
+      "description": "Response schema for the API home endpoint",
+      "properties": {
+        "message": {
+          "description": "Welcome message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "API Home Response",
+      "type": "object"
+    },
+    "TrainingResponse": {
+      "description": "Response schema for the training process",
+      "properties": {
+        "loss": {
+          "description": "Final loss value",
+          "type": "number"
+        },
+        "losses": {
+          "description": "List of loss values per epoch",
+          "items": "number",
+          "type": "array"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "losses",
+        "loss",
+        "message"
+      ],
+      "title": "Training Response",
+      "type": "object"
+    },
+    "EvaluationResults": {
+      "description": "Results of model evaluation",
+      "properties": {
+        "loss": {
+          "description": "Evaluation loss",
+          "type": "number"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loss",
+        "message"
+      ],
+      "title": "Evaluation Results",
       "type": "object"
     }
   },

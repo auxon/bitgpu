@@ -61,7 +61,7 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
 
       <%= if @selected_task do %>
         <div>
-          <h3>Task Result</h3>
+          <h3>Task Result for Task ID: <%= @selected_task.id %></h3>
           <pre><%= Jason.encode!(@selected_task.result, pretty: true) %></pre>
         </div>
       <% end %>
@@ -70,7 +70,7 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
   end
 
   def handle_event("view_result", %{"id" => id}, socket) do
-    task = MLTasks.get_task!(id)
+    task = MLTasks.get_task!(String.to_integer(id))
     Logger.info("Viewing result for task #{id}: #{inspect(task)}")
     {:noreply, assign(socket, selected_task: task)}
   end
