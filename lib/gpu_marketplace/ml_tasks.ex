@@ -1,6 +1,7 @@
 defmodule GpuMarketplace.MLTasks do
   alias GpuMarketplace.Repo
   alias GpuMarketplace.MLTasks.Task
+  require Logger  # Add this line to import Logger
 
   def list_tasks do
     Repo.all(Task)

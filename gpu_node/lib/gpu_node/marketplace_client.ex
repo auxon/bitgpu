@@ -15,8 +15,10 @@ defmodule GpuNode.MarketplaceClient do
   def send_result(task_id, result) do
     Logger.info("Sending result for task #{task_id}: #{inspect(result)}")
     message = Jason.encode!(%{
+      topic: "gpu:mymachine",
       event: "task_result",
-      payload: %{task_id: task_id, result: result}
+      payload: %{task_id: task_id, result: result},
+      ref: nil
     })
     WebSockex.send_frame(__MODULE__, {:text, message})
   end
@@ -30,8 +32,8 @@ defmodule GpuNode.MarketplaceClient do
   def handle_info(:after_connect, state) do
     Logger.info("Sending join message for gpu:#{state.gpu_id}")
     join_message = Jason.encode!(%{
-      event: "phx_join",
       topic: "gpu:#{state.gpu_id}",
+      event: "phx_join",
       payload: %{},
       ref: "1"
     })
@@ -40,8 +42,8 @@ defmodule GpuNode.MarketplaceClient do
 
   def handle_info(:send_join, state) do
     join_message = Jason.encode!(%{
-      event: "phx_join",
       topic: "gpu:#{state.gpu_id}",
+      event: "phx_join",
       payload: %{},
       ref: "1"
     })

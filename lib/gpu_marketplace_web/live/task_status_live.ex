@@ -4,7 +4,10 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
   require Logger
 
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Process.send_after(self(), :update, 1000)
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(GpuMarketplace.PubSub, "task_updates")
+      Process.send_after(self(), :update, 1000)
+    end
     tasks = MLTasks.list_tasks()
     Logger.info("Initial tasks: #{inspect(tasks)}")
     {:ok, assign(socket, tasks: tasks, selected_task: nil)}
@@ -15,6 +18,14 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
     tasks = MLTasks.list_tasks()
     Logger.info("Updated tasks: #{inspect(tasks)}")
     {:noreply, assign(socket, tasks: tasks)}
+  end
+
+  def handle_info({:task_updated, updated_task}, socket) do
+    Logger.info("Received task update: #{inspect(updated_task)}")
+    updated_tasks = Enum.map(socket.assigns.tasks, fn task ->
+      if task.id == updated_task.id, do: updated_task, else: task
+    end)
+    {:noreply, assign(socket, tasks: updated_tasks)}
   end
 
   def render(assigns) do

@@ -15,10 +15,11 @@ defmodule GpuMarketplaceWeb.GpuChannel do
     case MLTasks.update_task(task, %{status: "completed", result: result}) do
       {:ok, updated_task} ->
         Logger.info("Task #{task_id} updated successfully: #{inspect(updated_task)}")
-        {:noreply, socket}
+        Phoenix.PubSub.broadcast(GpuMarketplace.PubSub, "task_updates", {:task_updated, updated_task})
+        {:reply, :ok, socket}
       {:error, changeset} ->
         Logger.error("Failed to update task #{task_id}: #{inspect(changeset)}")
-        {:noreply, socket}
+        {:reply, {:error, %{reason: "Failed to update task"}}, socket}
     end
   end
 
