@@ -1,0 +1,32 @@
+<!-- lib/gpu_marketplace_web/templates/layout/app.html.heex -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ... existing head elements ... -->
+</head>
+<body>
+  <div id="app">
+    <%= if @current_user do %>
+      <p>Welcome, <%= @current_user.handcash_username %>!</p>
+      <button onclick="logout()">Logout</button>
+    <% else %>
+      <button onclick="login()">Login with Handcash</button>
+    <% end %>
+    <%= render @view_module, @view_template, assigns %>
+  </div>
+
+  <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  <script type="text/javascript">
+    import { handcash, loginWithHandcash, logoutHandcash } from "./handcash"
+
+    window.login = () => {
+      loginWithHandcash()
+    }
+
+    window.logout = () => {
+      logoutHandcash()
+      window.location.reload()
+    }
+  </script>
+</body>
+</html>

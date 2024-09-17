@@ -1,0 +1,8 @@
+# Ignore development secrets
+/config/dev.secret.exs
+/deps/
+/_build/
+/.elixir_ls/
+assets/node_modules/
+deps/bitcoinex/lib/opcode.ex
+.env

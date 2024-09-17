@@ -1,0 +1,11 @@
+<ul>
+  <%= for gpu <- @gpus do %>
+    <li>
+      <%= gpu.name %> - <%= gpu.status %>
+      <CoreComponents.link href={~p"/gpus/#{gpu.id}/rent"}>Rent</CoreComponents.link>
+    </li>
+  <% end %>
+</ul>
+
+<!-- WebGL Canvas -->
+<canvas id="webgl-canvas" width="800" height="600"></canvas>

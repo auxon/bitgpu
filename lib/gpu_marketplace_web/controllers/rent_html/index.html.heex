@@ -1,0 +1,40 @@
+<div class="container">
+  <CoreComponents.header>
+    Decentralized GPU Marketplace
+    <:subtitle>Find the perfect GPU for your AI training needs</:subtitle>
+    <:actions>
+      <CoreComponents.link href={~p"/gpus/new"} class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700">
+        Provide GPU <span aria-hidden="true">&rarr;</span>
+      </CoreComponents.link>
+    </:actions>
+  </CoreComponents.header>
+
+  <div id="connectButton" class="text-center mt-4">
+    <CoreComponents.button type="button" phx-click="connect_handcash">Connect with HandCash</CoreComponents.button>
+  </div>
+
+  <div id="marketplaceOptions" class="mt-8">
+    <CoreComponents.button type="button" phx-click="show_rental_form">Rent GPU</CoreComponents.button>
+    <CoreComponents.button type="button" phx-click="show_provider_form">Provide GPU</CoreComponents.button>
+  </div>
+
+  <.gpu_list gpus={@gpus} />
+
+  <div id="uploadForm" class="mt-8 bg-green-100 p-4 rounded-lg">
+    <h2 class="text-xl font-semibold mb-4">Upload Training Data</h2>
+    <CoreComponents.simple_form :let={f} for={%{}} action={~p"/upload-training-data"} as={:upload} phx-submit="upload_training_data">
+      <CoreComponents.input
+        type="file"
+        name="upload[training_data]"
+        id="upload_training_data"
+        label="Select Training Data (CSV)"
+        value=""
+        errors={[]}
+        accept=".csv"
+      />
+      <:actions>
+        <CoreComponents.button type="submit">Upload</CoreComponents.button>
+      </:actions>
+    </CoreComponents.simple_form>
+  </div>
+</div>

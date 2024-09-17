@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized GPU Marketplace for AI Training</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Decentralized GPU Marketplace</h1>
+        <div id="connectButton" url="https://app.handcash.io/#/authorizeApp?appId=YOUR_APP_ID">Connect with HandCash</div>
+        <div id="marketplaceOptions" style="display: none;">
+            <button id="rentGPUButton">Rent GPU</button>
+            <button id="provideGPUButton">Provide GPU</button>
+        </div>
+        <div id="rentalForm" style="display: none;">
+            <label for="duration">Rental Duration (minutes):</label>
+            <input type="number" id="duration" min="1" max="60" value="5">
+            <button id="rentButton">Rent GPU and Start Training</button>
+        </div>
+        <div id="providerForm" style="display: none;">
+            <label for="gpuSpecs">GPU Specifications:</label>
+            <input type="text" id="gpuSpecs" placeholder="e.g., NVIDIA RTX 3080">
+            <label for="pricePerMinute">Price per minute (in satoshis):</label>
+            <input type="number" id="pricePerMinute" min="1" value="100">
+            <button id="listGPUButton">List GPU for Rent</button>
+        </div>
+        <div id="status"></div>
+        <div id="progress"></div>
+        <div id="uploadForm">
+            <label for="trainingData">Upload Training Data (CSV):</label>
+            <input type="file" id="trainingData" accept=".csv">
+            <button id="uploadButton">Upload</button>
+        </div>
+    </div>
+    <script src="https://unpkg.com/@handcash/handcash-connect"></script>
+    <script src="app.js"></script>
+    <script>
+        // ... existing scripts ...
+        document.getElementById('uploadButton').addEventListener('click', () => {
+            const fileInput = document.getElementById('trainingData');
+            if (fileInput.files.length > 0) {
+                uploadTrainingData(fileInput.files[0]);
+            } else {
+                alert('Please select a file to upload');
+            }
+        });
+
+        document.getElementById('rentGPUButton').addEventListener('click', () => {
+            document.getElementById('rentalForm').style.display = 'block';
+            document.getElementById('providerForm').style.display = 'none';
+        });
+
+        document.getElementById('provideGPUButton').addEventListener('click', () => {
+            document.getElementById('rentalForm').style.display = 'none';
+            document.getElementById('providerForm').style.display = 'block';
+        });
+
+        document.getElementById('listGPUButton').addEventListener('click', () => {
+            const gpuSpecs = document.getElementById('gpuSpecs').value;
+            const pricePerMinute = document.getElementById('pricePerMinute').value;
+            listGPUForRent(gpuSpecs, pricePerMinute);
+        });
+    </script>
+</body>
+</html>

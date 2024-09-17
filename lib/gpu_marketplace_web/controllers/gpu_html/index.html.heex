@@ -1,0 +1,26 @@
+<CoreComponents.header>
+  Listing GPUs
+  <:actions>
+    <CoreComponents.link href={~p"/gpus/new"}>
+      New GPU
+    </CoreComponents.link>
+  </:actions>
+</CoreComponents.header>
+
+<CoreComponents.table id="gpus" rows={@gpus} row_click={&JS.navigate(~p"/gpus/#{&1.id}")}>
+  <:col :let={gpu} label="Name"><%= gpu.name %></:col>
+  <:col :let={gpu} label="Status"><%= gpu.status %></:col>
+  <:action :let={gpu}>
+    <div class="sr-only">
+      <CoreComponents.link href={~p"/gpus/#{gpu.id}"}>Show</CoreComponents.link>
+    </div>
+    <CoreComponents.link href={~p"/gpus/#{gpu.id}/edit"}>Edit</CoreComponents.link>
+  </:action>
+  <:action :let={gpu}>
+    <.form :let={_f} for={%{}} as={:gpu} action={~p"/gpus/#{gpu.id}"} method="delete">
+      <CoreComponents.button type="submit" class="text-sm text-red-600 hover:underline" data-confirm="Are you sure?">
+        Delete
+      </CoreComponents.button>
+    </.form>
+  </:action>
+</CoreComponents.table>

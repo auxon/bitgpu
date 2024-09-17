@@ -1,0 +1,11 @@
+<.header>
+  Rent GPU
+  <:subtitle>Rent the <%= @gpu.model %> GPU</:subtitle>
+</.header>
+
+<.simple_form :let={f} for={%{}} action={~p"/gpus/#{@gpu.id}/rent"} method="post">
+  <.input field={f[:duration]} type="number" label="Rental Duration (hours)" required />
+  <:actions>
+    <.button type="submit">Rent GPU</.button>
+  </:actions>
+</.simple_form>

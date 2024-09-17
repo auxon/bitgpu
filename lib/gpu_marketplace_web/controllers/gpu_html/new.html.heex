@@ -1,0 +1,11 @@
+<.header>
+  Add New GPU
+</.header>
+
+<.simple_form :let={f} for={%{}} action={~p"/api/gpus"} method="post">
+  <.input field={f[:model]} type="text" label="Model" />
+  <.input field={f[:memory]} type="number" label="Memory (GB)" />
+  <:actions>
+    <.button>Add GPU</.button>
+  </:actions>
+</.simple_form>

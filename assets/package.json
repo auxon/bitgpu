@@ -1,0 +1,35 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild*",
+    "build": "esbuild js/app.js --bundle --target=es2022 --outdir=../priv/static/assets --external:/fonts/* --external:/images/* --format=esm",
+    "watch": "esbuild js/app.js --bundle --target=es2022 --outdir=../priv/static/assets --watch --format=esm"
+  },
+  "browser": {
+    "crypto": "crypto-browserify",
+    "stream": "stream-browserify",
+    "buffer": "buffer"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@handcash/handcash-connect": "^0.8.8",
+    "@libp2p/mplex": "^11.0.1",
+    "@libp2p/noise": "^12.0.1",
+    "@libp2p/websockets": "^9.0.1",
+    "libp2p": "^2.0.2",
+    "phoenix": "file:../deps/phoenix",
+    "phoenix_html": "file:../deps/phoenix_html",
+    "phoenix_live_view": "file:../deps/phoenix_live_view"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "esbuild": "^0.14.41",
+    "stream-browserify": "^3.0.0"
+  }
+}

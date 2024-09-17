@@ -1,0 +1,319 @@
+{
+  "info": {
+    "version": "0.0.1",
+    "title": "<enter your title>"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "GPU": {
+      "description": "A GPU available for rent",
+      "properties": {
+        "id": {
+          "description": "Unique identifier",
+          "type": "string"
+        },
+        "memory": {
+          "description": "GPU memory in GB",
+          "type": "integer"
+        },
+        "model": {
+          "description": "GPU model",
+          "type": "string"
+        },
+        "status": {
+          "description": "Current status of the GPU",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "memory",
+        "model",
+        "id"
+      ],
+      "title": "GPU",
+      "type": "object"
+    },
+    "GPUParams": {
+      "description": "Parameters for adding a new GPU",
+      "properties": {
+        "memory": {
+          "description": "GPU memory in GB",
+          "type": "integer"
+        },
+        "model": {
+          "description": "GPU model",
+          "type": "string"
+        }
+      },
+      "required": [
+        "memory",
+        "model"
+      ],
+      "title": "GPU Parameters",
+      "type": "object"
+    },
+    "RentalResponse": {
+      "description": "Response for a successful GPU rental",
+      "properties": {
+        "duration": {
+          "description": "Rental duration in minutes",
+          "type": "integer"
+        },
+        "gpu_id": {
+          "description": "ID of the rented GPU",
+          "type": "string"
+        },
+        "transaction_id": {
+          "description": "ID of the payment transaction",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transaction_id",
+        "duration",
+        "gpu_id"
+      ],
+      "title": "Rental Response",
+      "type": "object"
+    },
+    "ApiHomeResponse": {
+      "description": "Response schema for the API home endpoint",
+      "properties": {
+        "message": {
+          "description": "Welcome message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "API Home Response",
+      "type": "object"
+    },
+    "TrainingResponse": {
+      "description": "Response schema for the training process",
+      "properties": {
+        "loss": {
+          "description": "Final loss value",
+          "type": "number"
+        },
+        "losses": {
+          "description": "List of loss values per epoch",
+          "items": "number",
+          "type": "array"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "losses",
+        "loss",
+        "message"
+      ],
+      "title": "Training Response",
+      "type": "object"
+    },
+    "EvaluationResults": {
+      "description": "Results of model evaluation",
+      "properties": {
+        "loss": {
+          "description": "Evaluation loss",
+          "type": "number"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loss",
+        "message"
+      ],
+      "title": "Evaluation Results",
+      "type": "object"
+    }
+  },
+  "swagger": "2.0",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Returns the home page of the application",
+        "operationId": "GpuMarketplaceWeb.PageController.home",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "summary": "Get Home Page",
+        "tags": [
+          "Page"
+        ]
+      }
+    },
+    "/api/evaluate": {
+      "get": {
+        "description": "Evaluates the trained model",
+        "operationId": "GpuMarketplaceWeb.TrainingController.evaluate",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/EvaluationResults"
+            }
+          },
+          "404": {
+            "description": "Model not found"
+          }
+        },
+        "summary": "Evaluate Model",
+        "tags": [
+          "Training"
+        ]
+      }
+    },
+    "/api/gpus": {
+      "get": {
+        "description": "Returns a list of all available GPUs for rent",
+        "operationId": "GpuMarketplaceWeb.GpuController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/GPU"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "List available GPUs",
+        "tags": [
+          "Gpu"
+        ]
+      },
+      "post": {
+        "description": "Adds a new GPU to the marketplace",
+        "operationId": "GpuMarketplaceWeb.GpuController.add",
+        "parameters": [
+          {
+            "description": "The GPU details",
+            "in": "body",
+            "name": "gpu",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GPUParams"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/GPU"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Add a new GPU",
+        "tags": [
+          "Gpu"
+        ]
+      }
+    },
+    "/api/gpus/{id}/rent": {
+      "post": {
+        "description": "Rents a GPU for a specified duration",
+        "operationId": "GpuMarketplaceWeb.GpuController.rent",
+        "parameters": [
+          {
+            "description": "GPU ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Rental duration in minutes",
+            "in": "query",
+            "name": "duration",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RentalResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Rent a GPU",
+        "tags": [
+          "Gpu"
+        ]
+      }
+    },
+    "/api/train": {
+      "post": {
+        "description": "Initiates the training process for the model on a rented GPU",
+        "operationId": "GpuMarketplaceWeb.TrainingController.train",
+        "parameters": [
+          {
+            "description": "ID of the rented GPU",
+            "in": "query",
+            "name": "gpu_id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Learning rate for the training process",
+            "in": "query",
+            "name": "learning_rate",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "description": "Number of epochs for training",
+            "in": "query",
+            "name": "num_epochs",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TrainingResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "GPU not found"
+          }
+        },
+        "summary": "Train Model",
+        "tags": [
+          "Training"
+        ]
+      }
+    }
+  }
+}
