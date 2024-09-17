@@ -5,7 +5,7 @@ defmodule GpuNode.MixProject do
     [
       app: :gpu_node,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -20,9 +20,9 @@ defmodule GpuNode.MixProject do
 
   defp deps do
     [
-      {:jason, "~> 1.2"},
+      {:jason, "~> 1.4"},
       {:websockex, "~> 0.4.3"},
-      {:nx, "~> 0.5"},
+      {:nx, "~> 0.8.0"},
       {:exla, "~> 0.5"},
       {:erlport, "~> 0.10"}
     ]

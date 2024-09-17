@@ -34,10 +34,10 @@ defmodule GpuNode.TaskExecutor do
 
     case model_type do
       "linear_regression" ->
-        {:ok, output} = linear_regression(input_tensor)
+        output = linear_regression(input_tensor)
         {:ok, Nx.to_flat_list(output)}
       "logistic_regression" ->
-        {:ok, output} = logistic_regression(input_tensor)
+        output = logistic_regression(input_tensor)
         {:ok, Nx.to_flat_list(output)}
       _ -> {:error, "Unsupported model type for Nx"}
     end
@@ -55,24 +55,28 @@ defmodule GpuNode.TaskExecutor do
     # Ensure input is 2-dimensional
     input = if Nx.rank(input) == 1, do: Nx.reshape(input, {1, Nx.axis_size(input, 0)}), else: input
 
-    # Simple linear regression model
-    weights = Nx.random_normal({1, Nx.axis_size(input, 1)}, seed: 42, backend: Nx.BinaryBackend)
-    bias = Nx.random_normal({1, 1}, seed: 42, backend: Nx.BinaryBackend)
+    input_size = Nx.axis_size(input, 1)
 
-    output = Nx.dot(input, Nx.transpose(weights)) + bias
-    {:ok, output}
+    # Simple linear regression model
+    key = Nx.Random.key(42)
+    {weights, _} = Nx.Random.uniform(key, shape: {1, input_size})
+    {bias, _} = Nx.Random.uniform(key, shape: {1, 1})
+
+    Nx.dot(input, Nx.transpose(weights)) + bias
   end
 
   defn logistic_regression(input) do
     # Ensure input is 2-dimensional
     input = if Nx.rank(input) == 1, do: Nx.reshape(input, {1, Nx.axis_size(input, 0)}), else: input
 
-    # Simple logistic regression model
-    weights = Nx.random_normal({1, Nx.axis_size(input, 1)}, seed: 42, backend: Nx.BinaryBackend)
-    bias = Nx.random_normal({1, 1}, seed: 42, backend: Nx.BinaryBackend)
+    input_size = Nx.axis_size(input, 1)
 
-    output = Nx.sigmoid(Nx.dot(input, Nx.transpose(weights)) + bias)
-    {:ok, output}
+    # Simple logistic regression model
+    key = Nx.Random.key(42)
+    {weights, _} = Nx.Random.uniform(key, shape: {1, input_size})
+    {bias, _} = Nx.Random.uniform(key, shape: {1, 1})
+
+    Nx.sigmoid(Nx.dot(input, Nx.transpose(weights)) + bias)
   end
 
   defp prepare_python_script(model_type, input_data) do
