@@ -1,5 +1,6 @@
 defmodule GpuMarketplace.Application do
   use Application
+  require Logger
 
   @impl true
   def start(_type, _args) do
@@ -8,7 +9,7 @@ defmodule GpuMarketplace.Application do
       GpuMarketplaceWeb.Telemetry,
       {Phoenix.PubSub, name: GpuMarketplace.PubSub},
       GpuMarketplaceWeb.Endpoint,
-      GpuMarketplace.GpuManager  # Make sure this line is present
+      {GpuMarketplace.P2PManager, []}  # Ensure P2PManager is started
     ]
 
     opts = [strategy: :one_for_one, name: GpuMarketplace.Supervisor]

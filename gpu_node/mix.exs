@@ -21,8 +21,10 @@ defmodule GpuNode.MixProject do
   defp deps do
     [
       {:jason, "~> 1.2"},
-      {:erlport, "~> 0.10"},
-      {:websockex, "~> 0.4.3"}
+      {:websockex, "~> 0.4.3"},
+      {:nx, "~> 0.5"},
+      {:exla, "~> 0.5"},
+      {:erlport, "~> 0.10"}
     ]
   end
 end

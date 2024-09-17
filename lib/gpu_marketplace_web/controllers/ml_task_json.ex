@@ -12,8 +12,12 @@ defmodule GpuMarketplaceWeb.MLTaskJSON do
     %{data: data(task)}
   end
 
-  def result(%{result: result}) do
-    %{result: result}
+  def result(%{task: task}) do
+    %{
+      id: task.id,
+      status: task.status,
+      result: task.result
+    }
   end
 
   def submitted(%{task: task}) do
@@ -31,8 +35,12 @@ defmodule GpuMarketplaceWeb.MLTaskJSON do
     %{error: error}
   end
 
-  def pending(_) do
-    %{message: "Task is still processing"}
+  def pending(%{task: task}) do
+    %{
+      id: task.id,
+      status: task.status,
+      message: "Task is still processing"
+    }
   end
 
   defp data(%Task{} = task) do

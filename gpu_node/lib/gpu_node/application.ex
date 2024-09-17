@@ -1,8 +1,16 @@
 defmodule GpuNode.Application do
   use Application
+  require Logger  # Add this line to import Logger
 
   def start(_type, _args) do
-    gpu_id = Application.get_env(:gpu_node, :gpu_id, "sample_gpu_id")
+    # Set EXLA as the default backend for Nx
+    Nx.global_default_backend(EXLA.Backend)
+
+    # Initialize Python
+    :python.start()
+
+    gpu_id = System.get_env("GPU_ID") || "default_gpu_id"
+    Logger.info("Starting GPU Node with ID: #{gpu_id}")
 
     children = [
       {GpuNode, []},

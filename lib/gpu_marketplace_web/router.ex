@@ -54,7 +54,7 @@ defmodule GpuMarketplaceWeb.Router do
 
     # ... (existing routes)
     resources "/ml_tasks", MLTaskController, only: [:create, :show]
-    get "/ml_tasks/:id/result", MLTaskController, :result
+    get "/ml_tasks/:id/result", MLTaskController, :view_result
     post "/ml_tasks/submit", MLTaskController, :submit
   end
 
