@@ -7,11 +7,20 @@
   </:actions>
 </.header>
 
-<.table id="gpus" rows={@gpus} row_click={&JS.navigate(~p"/gpus/#{&1}")}>
-  <:col :let={gpu} label="Model"><%= gpu.name %></:col>
-  <:col :let={gpu} label="Memory"><%= gpu.memory %> GB</:col>
-  <:col :let={gpu} label="Price per Hour">$<%= gpu.price_per_hour %></:col>
+<.table id="gpus" rows={@gpus}>
+  <:col :let={gpu} label="Name"><%= gpu.name %></:col>
   <:col :let={gpu} label="Status"><%= gpu.status %></:col>
+  <:col :let={gpu} label="Description"><%= gpu.description %></:col>
+  <:col :let={gpu} label="Connection info"><%= gpu.connection_info %></:col>
+  <:col :let={gpu} label="Price per hour"><%= gpu.price_per_hour %></:col>
+  <:col :let={gpu} label="Model"><%= gpu.model %></:col>
+  <:col :let={gpu} label="Memory">
+    <%= if Map.has_key?(gpu, :memory) do %>
+      <%= gpu.memory %> GB
+    <% else %>
+      N/A
+    <% end %>
+  </:col>
   <:action :let={gpu}>
     <div class="sr-only">
       <.link navigate={~p"/gpus/#{gpu}"}>Show</.link>
@@ -24,3 +33,7 @@
     </.link>
   </:action>
 </.table>
+
+<.link href={~p"/gpus/new"}>
+  New Gpu
+</.link>

@@ -15,6 +15,13 @@ defmodule GpuMarketplace.Gpus do
   def list_available_gpus do
     try do
       gpus = Repo.all(from g in Gpu, where: g.status == :available)
+      gpus = Enum.map(gpus, fn gpu ->
+        if Map.has_key?(gpu, :memory) do
+          gpu
+        else
+          Map.put(gpu, :memory, 0)
+        end
+      end)
       Logger.info("Fetched available GPUs: #{inspect(gpus)}")
       {:ok, gpus}
     rescue

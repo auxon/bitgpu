@@ -3,7 +3,7 @@ defmodule GpuMarketplace.Repo.Migrations.AddMemoryToGpus do
 
   def change do
     alter table(:gpus) do
-      add :memory, :integer
+      add :memory, :integer, default: 0
     end
   end
 end

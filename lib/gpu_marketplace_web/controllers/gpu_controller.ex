@@ -37,11 +37,16 @@ defmodule GpuMarketplaceWeb.GpuController do
   end
 
   def create(conn, %{"gpu" => gpu_params}) do
-    # Add connection_info to gpu_params
-    gpu_params = Map.put(gpu_params, "connection_info", %{
-      "ip_address" => get_client_ip(conn),
-      "port" => 8080  # You might want to make this configurable
-    })
+    # Add default values for missing fields
+    gpu_params = gpu_params
+      |> Map.put_new("name", gpu_params["model"])
+      |> Map.put_new("memory", 0)
+      |> Map.put_new("status", "available")
+      |> Map.put_new("description", "")
+      |> Map.put("connection_info", %{
+        "ip_address" => get_client_ip(conn),
+        "port" => 8080  # You might want to make this configurable
+      })
 
     case Gpus.create_gpu(gpu_params) do
       {:ok, gpu} ->
@@ -51,6 +56,20 @@ defmodule GpuMarketplaceWeb.GpuController do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :new, changeset: changeset)
+    end
+  end
+
+  def update(conn, %{"id" => id, "gpu" => gpu_params}) do
+    gpu = Gpus.get_gpu!(id)
+
+    case Gpus.update_gpu(gpu, gpu_params) do
+      {:ok, gpu} ->
+        conn
+        |> put_flash(:info, "GPU updated successfully.")
+        |> redirect(to: ~p"/gpus/#{gpu}")
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, :edit, gpu: gpu, changeset: changeset)
     end
   end
 

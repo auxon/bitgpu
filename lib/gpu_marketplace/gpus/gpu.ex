@@ -4,12 +4,12 @@ defmodule GpuMarketplace.Gpus.Gpu do
 
   schema "gpus" do
     field :name, :string
+    field :status, Ecto.Enum, values: [:available, :rented, :maintenance], default: :available
     field :description, :string
-    field :model, :string
-    field :memory, :integer
-    field :price_per_hour, :decimal
-    field :status, Ecto.Enum, values: [:available, :rented, :offline]
     field :connection_info, :map
+    field :price_per_hour, :decimal
+    field :model, :string
+    field :memory, :integer, default: 0
 
     timestamps()
   end
@@ -17,8 +17,10 @@ defmodule GpuMarketplace.Gpus.Gpu do
   @doc false
   def changeset(gpu, attrs) do
     gpu
-    |> cast(attrs, [:name, :description, :model, :price_per_hour, :status, :connection_info])
-    |> validate_required([:name, :description, :model, :price_per_hour, :status])
+    |> cast(attrs, [:name, :status, :description, :connection_info, :price_per_hour, :model, :memory])
+    |> validate_required([:name, :status, :price_per_hour, :model, :memory])
+    |> validate_number(:memory, greater_than: 0)
+    |> validate_number(:price_per_hour, greater_than: 0)
     |> validate_connection_info()
   end
 
