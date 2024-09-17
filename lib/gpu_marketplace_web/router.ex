@@ -35,6 +35,10 @@ defmodule GpuMarketplaceWeb.Router do
     get "/rent", RentController, :index
 
     post "/upload-training-data", TrainingDataController, :upload
+
+    # Add this to your :browser scope
+    resources "/rent", RentController, only: [:index]
+    post "/rent/:id", RentController, :rent
   end
 
   scope "/api", GpuMarketplaceWeb do

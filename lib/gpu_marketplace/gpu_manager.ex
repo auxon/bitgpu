@@ -37,16 +37,23 @@ defmodule GpuMarketplace.GpuManager do
   end
 
   def rent_gpu(gpu_id, duration) do
-    # Implement the rental logic here
-    # This should include:
-    # 1. Checking if the GPU is available
-    # 2. Processing the payment
-    # 3. Updating the GPU status
-    # 4. Creating a rental record
-    # 5. Any necessary broadcasting
-
-    # For now, let's return a mock successful response
-    {:ok, %{gpu_id: gpu_id, duration: duration, transaction_id: "mock_transaction_id"}}
+    case Gpus.get_gpu(gpu_id) do
+      nil ->
+        {:error, :not_found}
+      gpu ->
+        if gpu.status == :available do
+          total_cost = Decimal.mult(gpu.price_per_hour, Decimal.div(duration, 60))
+          rental = %{
+            gpu: gpu,
+            duration: duration,
+            total_cost: total_cost
+          }
+          Gpus.update_gpu(gpu, %{status: :rented})
+          {:ok, rental}
+        else
+          {:error, :gpu_not_available}
+        end
+    end
   end
 
   # Server Callbacks

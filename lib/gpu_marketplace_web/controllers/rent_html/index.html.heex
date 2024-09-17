@@ -1,51 +1,26 @@
 <div class="bg-gray-100 min-h-screen">
   <div class="container mx-auto px-4 py-8">
-    <.header class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Available GPUs for Rent</h1>
-      <p class="text-gray-600">Find the perfect GPU for your AI training needs</p>
+    <.header>
+      Available GPUs for Rent
+      <:subtitle>Find the perfect GPU for your AI training needs</:subtitle>
     </.header>
 
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price per Hour</th>
-            <th scope="col" class="relative px-6 py-3">
-              <span class="sr-only">Rent</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <%= for gpu <- @gpus do %>
-            <tr>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= gpu.name %></td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= gpu.model %></td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<%= gpu.price_per_hour %></td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <.link href={~p"/gpus/#{gpu.id}/rent"} class="text-indigo-600 hover:text-indigo-900">Rent</.link>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <.gpu_list gpus={@gpus} />
 
     <div class="mt-8">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Upload Training Data</h2>
       <div class="bg-white rounded-lg shadow-md p-6">
-        <CoreComponents.simple_form :let={f} for={%{}} action={~p"/upload-training-data"} as={:upload} phx-submit="upload_training_data">
-          <CoreComponents.input
+        <.simple_form :let={f} for={%{}} action={~p"/upload-training-data"} as={:upload} phx-submit="upload_training_data">
+          <.input
             field={f[:training_data]}
             type="file"
             label="Select Training Data (CSV)"
             accept=".csv"
           />
           <:actions>
-            <CoreComponents.button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white">Upload</CoreComponents.button>
+            <.button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white">Upload</.button>
           </:actions>
-        </CoreComponents.simple_form>
+        </.simple_form>
       </div>
     </div>
   </div>
