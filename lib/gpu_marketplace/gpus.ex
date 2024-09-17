@@ -1,41 +1,57 @@
-defmodule GpuMarketplace.GPUs do
+defmodule GpuMarketplace.Gpus do
+  @moduledoc """
+  The Gpus context.
+  """
+
+  import Ecto.Query, warn: false
   alias GpuMarketplace.Repo
-  alias GpuMarketplace.GPUs.GPU
-  import Ecto.Query
-  require Logger
+
+  alias GpuMarketplace.Gpus.Gpu
 
   def list_gpus do
-    Repo.all(GPU)
+    Repo.all(Gpu)
   end
 
   def list_available_gpus do
-    gpus = Repo.all(from g in GPU, where: g.status == "available")
-    Logger.info("Fetched available GPUs: #{inspect(gpus)}")
-    {:ok, gpus}
+    try do
+      gpus = Repo.all(from g in Gpu, where: g.status == :available)
+      Logger.info("Fetched available GPUs: #{inspect(gpus)}")
+      {:ok, gpus}
+    rescue
+      e in Ecto.QueryError ->
+        Logger.error("Error fetching available GPUs: #{inspect(e)}")
+        {:error, :database_error}
+    end
   end
 
-  def get_gpu(id), do: Repo.get(GPU, id)
+  def get_gpu(id), do: Repo.get(Gpu, id)
 
-  def get_gpu!(id), do: Repo.get!(GPU, id)
+  def get_gpu!(id), do: Repo.get!(Gpu, id)
 
+  @doc """
+  Creates a gpu.
+  """
   def create_gpu(attrs \\ %{}) do
-    %GPU{}
-    |> GPU.changeset(attrs)
+    %Gpu{}
+    |> Gpu.changeset(attrs)
     |> Repo.insert()
   end
 
-  def update_gpu(%GPU{} = gpu, attrs) do
+  def update_gpu(%Gpu{} = gpu, attrs) do
     gpu
-    |> GPU.changeset(attrs)
+    |> Gpu.changeset(attrs)
     |> Repo.update()
   end
 
-  def delete_gpu(%GPU{} = gpu) do
+  def delete_gpu(%Gpu{} = gpu) do
     Repo.delete(gpu)
   end
 
-  def change_gpu(%GPU{} = gpu, attrs \\ %{}) do
-    GPU.changeset(gpu, attrs)
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking gpu changes.
+  """
+  def change_gpu(%Gpu{} = gpu, attrs \\ %{}) do
+    Gpu.changeset(gpu, attrs)
   end
 
   # ... other functions ...

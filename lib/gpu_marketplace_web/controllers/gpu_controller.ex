@@ -3,8 +3,8 @@ defmodule GpuMarketplaceWeb.GpuController do
   use PhoenixSwagger
   require Logger
 
-  alias GpuMarketplace.GPUs
-  alias GpuMarketplace.GPUs.GPU
+  alias GpuMarketplace.Gpus
+  alias GpuMarketplace.Gpus.Gpu
   alias GpuMarketplace.GpuManager
 
   swagger_path :list do
@@ -32,12 +32,18 @@ defmodule GpuMarketplaceWeb.GpuController do
   end
 
   def new(conn, _params) do
-    changeset = GPUs.change_gpu(%GPU{})
+    changeset = Gpus.change_gpu(%Gpu{})
     render(conn, :new, changeset: changeset)
   end
 
   def create(conn, %{"gpu" => gpu_params}) do
-    case GPUs.create_gpu(gpu_params) do
+    # Add connection_info to gpu_params
+    gpu_params = Map.put(gpu_params, "connection_info", %{
+      "ip_address" => get_client_ip(conn),
+      "port" => 8080  # You might want to make this configurable
+    })
+
+    case Gpus.create_gpu(gpu_params) do
       {:ok, gpu} ->
         conn
         |> put_flash(:info, "GPU created successfully.")
@@ -49,7 +55,7 @@ defmodule GpuMarketplaceWeb.GpuController do
   end
 
   def rent_form(conn, %{"id" => id}) do
-    case GpuMarketplace.GPUs.get_gpu(id) do
+    case Gpus.get_gpu(id) do
       nil ->
         conn
         |> put_flash(:error, "GPU not found")
@@ -98,45 +104,23 @@ defmodule GpuMarketplaceWeb.GpuController do
   end
 
   def rent(conn, %{"id" => gpu_id, "duration" => duration}) do
-    # Convert duration to integer, defaulting to 0 if it's an empty string
-    duration = case Integer.parse(duration) do
-      {value, _} -> value
-      :error -> 0
-    end
+    # Convert duration to integer
+    duration = String.to_integer(duration)
 
-    case GpuManager.allocate_gpu(gpu_id) do
-      {:ok, gpu} ->
-        # For now, we'll skip the payment verification and just simulate a successful rental
+    case GpuManager.rent_gpu(gpu_id, duration) do
+      {:ok, rental} ->
         conn
-        |> put_flash(:info, "GPU #{gpu.model} rented successfully for #{duration} hours.")
-        |> redirect(to: ~p"/rent")
-      {:error, :not_found} ->
-        conn
-        |> put_flash(:error, "GPU not found")
-        |> redirect(to: ~p"/rent")
-      {:error, :not_available} ->
-        conn
-        |> put_flash(:error, "GPU is not available for rent")
-        |> redirect(to: ~p"/rent")
-    end
-  end
-
-  defp verify_handcash_transaction(transaction_id) do
-    app_secret = Application.get_env(:gpu_marketplace, :handcash_app_secret)
-    case HandcashClient.verify_transaction(transaction_id, app_secret) do
-      {:ok, %{status: 200, body: body}} ->
-        # Here you would implement logic to verify the transaction details
-        # For now, we'll just assume it's valid if we get a 200 response
-        {:ok, body}
-      {:ok, %{status: status}} ->
-        {:error, "Unexpected status code: #{status}"}
+        |> put_status(:ok)
+        |> render("rental.json", rental: rental)
       {:error, reason} ->
-        {:error, reason}
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: reason})
     end
   end
 
   def show(conn, %{"id" => id}) do
-    gpu = GPUs.get_gpu!(id)
+    gpu = Gpus.get_gpu!(id)
     render(conn, :show, gpu: gpu)
   end
 
@@ -170,5 +154,11 @@ defmodule GpuMarketplaceWeb.GpuController do
         end
       end
     }
+  end
+
+  defp get_client_ip(conn) do
+    conn.remote_ip
+    |> :inet.ntoa()
+    |> to_string()
   end
 end
