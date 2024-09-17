@@ -32,7 +32,7 @@ config :esbuild,
     external: ["/fonts/*", "/images/*"],
     define: %{
       "process.env.NODE_ENV": "\"#{Mix.env()}\"",
-      "global": "window"
+      global: "window"
     },
     alias: %{
       "crypto" => "crypto-browserify",

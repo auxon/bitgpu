@@ -17,7 +17,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= gpu.memory %> GB</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<%= gpu.price_per_hour %></td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <CoreComponents.link href={~p"/gpus/#{gpu.id}/rent"} class="text-indigo-600 hover:text-indigo-900">Rent</CoreComponents.link>
+            <.link href={~p"/gpus/#{gpu.id}/rent"} class="text-indigo-600 hover:text-indigo-900">Rent</.link>
           </td>
         </tr>
       <% end %>

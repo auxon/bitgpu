@@ -5,9 +5,9 @@ defmodule GpuMarketplace.Application do
   def start(_type, _args) do
     children = [
       GpuMarketplace.Repo,
-      {Phoenix.PubSub, name: GpuMarketplace.PubSub},  # Add this line
-      GpuMarketplaceWeb.Endpoint
-      # ... other children ...
+      {Phoenix.PubSub, name: GpuMarketplace.PubSub},
+      GpuMarketplaceWeb.Endpoint,
+      GpuMarketplace.GpuManager  # Add this line
     ]
 
     opts = [strategy: :one_for_one, name: GpuMarketplace.Supervisor]

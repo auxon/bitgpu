@@ -2,7 +2,7 @@
   <%= for gpu <- @gpus do %>
     <li>
       <%= gpu.name %> - <%= gpu.status %>
-      <CoreComponents.link href={~p"/gpus/#{gpu.id}/rent"}>Rent</CoreComponents.link>
+      <.link href={~p"/gpus/#{gpu.id}/rent"}>Rent</.link>
     </li>
   <% end %>
 </ul>

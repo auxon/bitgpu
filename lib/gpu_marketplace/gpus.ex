@@ -1,28 +1,40 @@
 defmodule GpuMarketplace.GPUs do
-  # ... existing code ...
+  alias GpuMarketplace.Repo
+  alias GpuMarketplace.GPUs.GPU
 
-  @doc """
-  Returns a list of GPUs available for rent.
-  """
+  def list_gpus do
+    Repo.all(GPU)
+  end
+
   def list_available_gpus do
-    # Implement the logic to fetch available GPUs from your database
-    # For now, let's return a mock list of GPUs
-    [
-      %{id: 1, model: "RTX 3080", memory: 10, price_per_hour: 2.5},
-      %{id: 2, model: "RTX 3090", memory: 24, price_per_hour: 4.0},
-      %{id: 3, model: "A100", memory: 80, price_per_hour: 10.0}
-    ]
+    # For now, we'll just return all GPUs
+    # In a real application, you might want to filter based on availability
+    list_gpus()
   end
 
-  @doc """
-  Gets a single gpu.
+  def get_gpu(id), do: Repo.get(GPU, id)
 
-  Returns nil if the GPU does not exist.
-  """
-  def get_gpu(id) do
-    # For now, let's use our mock data
-    Enum.find(list_available_gpus(), fn gpu -> gpu.id == String.to_integer(id) end)
+  def get_gpu!(id), do: Repo.get!(GPU, id)
+
+  def create_gpu(attrs \\ %{}) do
+    %GPU{}
+    |> GPU.changeset(attrs)
+    |> Repo.insert()
   end
 
-  # ... rest of the file ...
+  def update_gpu(%GPU{} = gpu, attrs) do
+    gpu
+    |> GPU.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_gpu(%GPU{} = gpu) do
+    Repo.delete(gpu)
+  end
+
+  def change_gpu(%GPU{} = gpu, attrs \\ %{}) do
+    GPU.changeset(gpu, attrs)
+  end
+
+  # ... other functions ...
 end

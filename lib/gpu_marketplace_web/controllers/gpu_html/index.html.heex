@@ -1,9 +1,9 @@
 <CoreComponents.header>
   Listing GPUs
   <:actions>
-    <CoreComponents.link href={~p"/gpus/new"}>
+    <.link href={~p"/gpus/new"}>
       New GPU
-    </CoreComponents.link>
+    </.link>
   </:actions>
 </CoreComponents.header>
 
@@ -12,9 +12,9 @@
   <:col :let={gpu} label="Status"><%= gpu.status %></:col>
   <:action :let={gpu}>
     <div class="sr-only">
-      <CoreComponents.link href={~p"/gpus/#{gpu.id}"}>Show</CoreComponents.link>
+      <.link href={~p"/gpus/#{gpu.id}"}>Show</.link>
     </div>
-    <CoreComponents.link href={~p"/gpus/#{gpu.id}/edit"}>Edit</CoreComponents.link>
+    <.link href={~p"/gpus/#{gpu.id}/edit"}>Edit</.link>
   </:action>
   <:action :let={gpu}>
     <.form :let={_f} for={%{}} as={:gpu} action={~p"/gpus/#{gpu.id}"} method="delete">

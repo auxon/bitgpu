@@ -2,7 +2,4 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* Add this line to import your custom styles */
-@import "./custom.css";
-
-/* This file is for your main application CSS */
+/* Your custom styles go here */

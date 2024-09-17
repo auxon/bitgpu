@@ -5,6 +5,20 @@
   },
   "host": "localhost:4000",
   "definitions": {
+    "ApiHomeResponse": {
+      "description": "Response schema for the API home endpoint",
+      "properties": {
+        "message": {
+          "description": "Welcome message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "API Home Response",
+      "type": "object"
+    },
     "GPU": {
       "description": "A GPU available for rent",
       "properties": {
@@ -77,18 +91,23 @@
       "title": "Rental Response",
       "type": "object"
     },
-    "ApiHomeResponse": {
-      "description": "Response schema for the API home endpoint",
+    "EvaluationResults": {
+      "description": "Results of model evaluation",
       "properties": {
+        "loss": {
+          "description": "Evaluation loss",
+          "type": "number"
+        },
         "message": {
-          "description": "Welcome message",
+          "description": "Status message",
           "type": "string"
         }
       },
       "required": [
+        "loss",
         "message"
       ],
-      "title": "API Home Response",
+      "title": "Evaluation Results",
       "type": "object"
     },
     "TrainingResponse": {
@@ -115,28 +134,8 @@
       ],
       "title": "Training Response",
       "type": "object"
-    },
-    "EvaluationResults": {
-      "description": "Results of model evaluation",
-      "properties": {
-        "loss": {
-          "description": "Evaluation loss",
-          "type": "number"
-        },
-        "message": {
-          "description": "Status message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "loss",
-        "message"
-      ],
-      "title": "Evaluation Results",
-      "type": "object"
     }
   },
-  "swagger": "2.0",
   "paths": {
     "/": {
       "get": {
@@ -315,5 +314,6 @@
         ]
       }
     }
-  }
+  },
+  "swagger": "2.0"
 }

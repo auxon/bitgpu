@@ -1,5 +1,7 @@
 defmodule GpuMarketplaceWeb.CoreComponents do
   use Phoenix.Component
+  # Remove the import to avoid conflicts
+  # import Phoenix.HTML.Link
 
   # Remove the unused alias
   # alias Phoenix.LiveView.JS
@@ -8,9 +10,12 @@ defmodule GpuMarketplaceWeb.CoreComponents do
   # For example:
 
   def button(assigns) do
-    assigns = assigns
+    assigns =
+      assigns
+      |> assign_new(:type, fn -> "button" end)
       |> assign_new(:class, fn -> "" end)
       |> assign_new(:rest, fn -> %{} end)
+
     ~H"""
     <button
       type={@type}
@@ -114,18 +119,6 @@ defmodule GpuMarketplaceWeb.CoreComponents do
     """
   end
 
-  attr :href, :string, required: true
-  attr :class, :string, default: nil
-  attr :rest, :global
-  slot :inner_block, required: true
-  def link(assigns) do
-    ~H"""
-    <a href={@href} class="text-blue-600 hover:underline">
-      <%= render_slot(@inner_block) %>
-    </a>
-    """
-  end
-
   def simple_form(assigns) do
     assigns = assign_new(assigns, :rest, fn -> %{} end)
     ~H"""
@@ -141,27 +134,43 @@ defmodule GpuMarketplaceWeb.CoreComponents do
   end
 
   def input(assigns) do
-    assigns = assign_new(assigns, :rest, fn -> %{} end)
+    assigns =
+      assigns
+      |> assign_new(:type, fn -> "text" end)
+      |> assign_new(:errors, fn -> [] end)
+      |> assign_new(:rest, fn -> %{} end)
+
     ~H"""
-    <div phx-feedback-for={@field.name}>
-      <.label for={@field.id}><%= @label %></.label>
+    <div phx-feedback-for={input_name(assigns)}>
+      <.label for={input_id(assigns)}><%= @label %></.label>
       <input
         type={@type}
-        name={@field.name}
-        id={@field.id}
-        value={@field.value}
+        name={input_name(assigns)}
+        id={input_id(assigns)}
+        value={input_value(assigns)}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           "border-zinc-300 focus:border-zinc-400",
-          @field.errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       />
-      <.error :for={msg <- @field.errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end
+
+  defp input_id(%{field: %Phoenix.HTML.FormField{} = field}), do: field.id
+  defp input_id(%{id: id}), do: id
+  defp input_id(%{name: name}), do: name
+
+  defp input_name(%{field: %Phoenix.HTML.FormField{} = field}), do: field.name
+  defp input_name(%{name: name}), do: name
+
+  defp input_value(%{field: %Phoenix.HTML.FormField{} = field}), do: field.value
+  defp input_value(%{value: value}), do: value
+  defp input_value(_), do: nil
 
   def label(assigns) do
     ~H"""
@@ -219,4 +228,35 @@ defmodule GpuMarketplaceWeb.CoreComponents do
   # Add more icon paths as needed
 
   # Add more components as needed
+
+  def back(assigns) do
+    ~H"""
+    <%= live_patch to: @navigate, class: "font-semibold text-sm text-zinc-900 hover:text-zinc-700" do %>
+      <.icon name="hero-arrow-left-solid" class="w-3 h-3 mr-1" />
+      <%= render_slot(@inner_block) %>
+    <% end %>
+    """
+  end
+
+  # Rename `link` to `app_link`
+  def app_link(assigns) do
+    ~H"""
+    <%= Phoenix.HTML.Link.link(@inner_block, @assigns) %>
+    """
+  end
+
+  def list(assigns) do
+    ~H"""
+    <div class="mt-14">
+      <dl class="-my-4 divide-y divide-zinc-100">
+        <%= for {dt, dd} <- @items do %>
+          <div class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
+            <dt class="w-1/4 flex-none text-zinc-500"><%= dt %></dt>
+            <dd class="text-zinc-700"><%= dd %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+    """
+  end
 end

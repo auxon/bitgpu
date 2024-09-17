@@ -20,7 +20,13 @@ defmodule GpuMarketplace.GpuManager do
   end
 
   def allocate_gpu(gpu_id) do
-    GenServer.call(__MODULE__, {:allocate_gpu, gpu_id})
+    case GpuMarketplace.GPUs.get_gpu(gpu_id) do
+      nil ->
+        {:error, :not_found}
+      gpu ->
+        # Your allocation logic here
+        {:ok, gpu}
+    end
   end
 
   def release_gpu(gpu_id) do
@@ -30,8 +36,8 @@ defmodule GpuMarketplace.GpuManager do
   # Server Callbacks
 
   @impl true
-  def init(_) do
-    {:ok, %{gpus: %{}}}
+  def init(state) do
+    {:ok, state}
   end
 
   @impl true
@@ -54,17 +60,13 @@ defmodule GpuMarketplace.GpuManager do
 
   @impl true
   def handle_call({:allocate_gpu, gpu_id}, _from, state) do
-    case Map.get(state.gpus, gpu_id) do
-      %{status: :available} ->
-        updated_gpu = Map.put(state.gpus[gpu_id], :status, :allocated)
-        new_gpus = Map.put(state.gpus, gpu_id, updated_gpu)
-        {:reply, {:ok, updated_gpu}, %{state | gpus: new_gpus}}
-
-      %{status: :allocated} ->
-        {:reply, {:error, :already_allocated}, state}
-
-      _ ->
+    # Implement your GPU allocation logic here
+    # For now, let's just return a mock response
+    case GpuMarketplace.GPUs.get_gpu(gpu_id) do
+      nil ->
         {:reply, {:error, :not_found}, state}
+      gpu ->
+        {:reply, {:ok, gpu}, state}
     end
   end
 

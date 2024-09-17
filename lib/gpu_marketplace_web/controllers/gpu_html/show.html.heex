@@ -1,0 +1,17 @@
+<.header>
+  GPU <%= @gpu.id %>
+  <:subtitle>This is a gpu record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/gpus/#{@gpu}/edit"}>
+      <.button>Edit gpu</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Model"><%= @gpu.model %></:item>
+  <:item title="Memory"><%= @gpu.memory %> GB</:item>
+  <:item title="Price per hour">$<%= @gpu.price_per_hour %></:item>
+</.list>
+
+<.back navigate={~p"/gpus"}>Back to gpus</.back>

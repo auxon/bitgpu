@@ -1,11 +1,20 @@
 <.header>
-  Add New GPU
+  New GPU
+  <:subtitle>Use this form to add a new GPU to the marketplace.</:subtitle>
 </.header>
 
-<.simple_form :let={f} for={%{}} action={~p"/api/gpus"} method="post">
+<.simple_form :let={f} for={@changeset} action={~p"/gpus"}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+
   <.input field={f[:model]} type="text" label="Model" />
   <.input field={f[:memory]} type="number" label="Memory (GB)" />
+  <.input field={f[:price_per_hour]} type="number" label="Price per Hour ($)" step="0.01" />
+
   <:actions>
-    <.button>Add GPU</.button>
+    <.button type="submit">Save GPU</.button>
   </:actions>
 </.simple_form>
+
+<.back navigate={~p"/gpus"}>Back to GPUs</.back>
