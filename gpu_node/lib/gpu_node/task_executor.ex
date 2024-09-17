@@ -6,7 +6,7 @@ defmodule GpuNode.TaskExecutor do
     Logger.info("Starting execution of task: #{inspect(task)}")
     try do
       # Parse task parameters
-      %{"input_data" => input_data, "model_type" => model_type, "execution_engine" => execution_engine} = task.parameters
+      %{"parameters" => %{"input_data" => input_data, "model_type" => model_type, "execution_engine" => execution_engine}} = task
 
       result = case execution_engine do
         "nx" -> execute_nx_task(model_type, input_data)
@@ -52,18 +52,24 @@ defmodule GpuNode.TaskExecutor do
   end
 
   defn linear_regression(input) do
+    # Ensure input is 2-dimensional
+    input = if Nx.rank(input) == 1, do: Nx.reshape(input, {1, Nx.axis_size(input, 0)}), else: input
+
     # Simple linear regression model
-    weights = Nx.random_normal({1, Nx.axis_size(input, 1)})
-    bias = Nx.random_normal({1, 1})
+    weights = Nx.random_normal({1, Nx.axis_size(input, 1)}, seed: 42, backend: Nx.BinaryBackend)
+    bias = Nx.random_normal({1, 1}, seed: 42, backend: Nx.BinaryBackend)
 
     output = Nx.dot(input, Nx.transpose(weights)) + bias
     {:ok, output}
   end
 
   defn logistic_regression(input) do
+    # Ensure input is 2-dimensional
+    input = if Nx.rank(input) == 1, do: Nx.reshape(input, {1, Nx.axis_size(input, 0)}), else: input
+
     # Simple logistic regression model
-    weights = Nx.random_normal({1, Nx.axis_size(input, 1)})
-    bias = Nx.random_normal({1, 1})
+    weights = Nx.random_normal({1, Nx.axis_size(input, 1)}, seed: 42, backend: Nx.BinaryBackend)
+    bias = Nx.random_normal({1, 1}, seed: 42, backend: Nx.BinaryBackend)
 
     output = Nx.sigmoid(Nx.dot(input, Nx.transpose(weights)) + bias)
     {:ok, output}
