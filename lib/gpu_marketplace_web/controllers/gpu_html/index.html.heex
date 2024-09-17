@@ -1,26 +1,26 @@
-<CoreComponents.header>
+<.header>
   Listing GPUs
   <:actions>
     <.link href={~p"/gpus/new"}>
-      New GPU
+      <.button>New GPU</.button>
     </.link>
   </:actions>
-</CoreComponents.header>
+</.header>
 
-<CoreComponents.table id="gpus" rows={@gpus} row_click={&JS.navigate(~p"/gpus/#{&1.id}")}>
-  <:col :let={gpu} label="Name"><%= gpu.name %></:col>
+<.table id="gpus" rows={@gpus} row_click={&JS.navigate(~p"/gpus/#{&1}")}>
+  <:col :let={gpu} label="Model"><%= gpu.model %></:col>
+  <:col :let={gpu} label="Memory"><%= gpu.memory %> GB</:col>
+  <:col :let={gpu} label="Price per Hour">$<%= gpu.price_per_hour %></:col>
   <:col :let={gpu} label="Status"><%= gpu.status %></:col>
   <:action :let={gpu}>
     <div class="sr-only">
-      <.link href={~p"/gpus/#{gpu.id}"}>Show</.link>
+      <.link navigate={~p"/gpus/#{gpu}"}>Show</.link>
     </div>
-    <.link href={~p"/gpus/#{gpu.id}/edit"}>Edit</.link>
+    <.link navigate={~p"/gpus/#{gpu}/edit"}>Edit</.link>
   </:action>
   <:action :let={gpu}>
-    <.form :let={_f} for={%{}} as={:gpu} action={~p"/gpus/#{gpu.id}"} method="delete">
-      <CoreComponents.button type="submit" class="text-sm text-red-600 hover:underline" data-confirm="Are you sure?">
-        Delete
-      </CoreComponents.button>
-    </.form>
+    <.link href={~p"/gpus/#{gpu}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
   </:action>
-</CoreComponents.table>
+</.table>
