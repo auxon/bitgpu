@@ -1,23 +1,27 @@
 defmodule GpuMarketplace.Application do
   use Application
 
-  @impl true
   def start(_type, _args) do
     children = [
+      # Start the Ecto repository
       GpuMarketplace.Repo,
+
+      # Start the Telemetry supervisor
       GpuMarketplaceWeb.Telemetry,
+
+      # Start the PubSub system
       {Phoenix.PubSub, name: GpuMarketplace.PubSub},
+
+      # Start the Endpoint (http/https)
       GpuMarketplaceWeb.Endpoint,
-      GpuMarketplace.GpuManager  # Make sure this line is present
+
+      # Start the GpuManager GenServer
+      GpuMarketplace.GpuManager
     ]
 
     opts = [strategy: :one_for_one, name: GpuMarketplace.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
-  @impl true
-  def config_change(changed, _new, removed) do
-    GpuMarketplaceWeb.Endpoint.config_change(changed, removed)
-    :ok
-  end
+  # ... existing code ...
 end

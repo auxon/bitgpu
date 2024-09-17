@@ -1,5 +1,6 @@
 defmodule GpuMarketplace.GpuManager do
   use GenServer
+  require Logger
 
   # Client API
 
@@ -36,8 +37,10 @@ defmodule GpuMarketplace.GpuManager do
   # Server Callbacks
 
   @impl true
-  def init(state) do
-    {:ok, state}
+  def init(_) do
+    {:ok, gpus} = GpuMarketplace.GPUs.list_available_gpus()
+    Logger.info("GpuManager initializing with GPUs: #{inspect(gpus)}")
+    {:ok, %{gpus: gpus}}
   end
 
   @impl true
@@ -52,10 +55,10 @@ defmodule GpuMarketplace.GpuManager do
   end
 
   @impl true
-  def handle_call(:list_available_gpus, _from, state) do
-    available = Enum.filter(state.gpus, fn {_id, gpu} -> gpu.status == :available end)
-                 |> Enum.map(fn {id, gpu} -> Map.put(gpu, :id, id) end)
-    {:reply, available, state}
+  def handle_call(:list_available_gpus, _from, %{gpus: gpus} = state) do
+    Logger.info("Handling :list_available_gpus call. Current state: #{inspect(state)}")
+    available = Enum.filter(gpus, fn gpu -> gpu.status == "available" end)
+    {:reply, {:ok, available}, state}  # Wrap the result in {:ok, ...}
   end
 
   @impl true
@@ -72,10 +75,10 @@ defmodule GpuMarketplace.GpuManager do
 
   @impl true
   def handle_call({:release_gpu, gpu_id}, _from, state) do
-    case Map.get(state.gpus, gpu_id) do
-      %{status: :allocated} ->
-        updated_gpu = Map.put(state.gpus[gpu_id], :status, :available)
-        new_gpus = Map.put(state.gpus, gpu_id, updated_gpu)
+    case Enum.find(state.gpus, fn gpu -> gpu.id == gpu_id end) do
+      %{status: "rented"} = gpu ->
+        updated_gpu = %{gpu | status: "available"}
+        new_gpus = Enum.map(state.gpus, fn g -> if g.id == gpu_id, do: updated_gpu, else: g end)
         {:reply, :ok, %{state | gpus: new_gpus}}
 
       _ ->

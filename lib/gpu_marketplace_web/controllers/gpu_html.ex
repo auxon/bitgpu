@@ -1,9 +1,8 @@
 defmodule GpuMarketplaceWeb.GpuHTML do
   use GpuMarketplaceWeb, :html
 
+  # Import CoreComponents explicitly
   import GpuMarketplaceWeb.CoreComponents
-  # Remove the Phoenix.HTML.Link import
-  # import Phoenix.HTML.Link
 
   embed_templates "gpu_html/*"
 
@@ -32,18 +31,18 @@ defmodule GpuMarketplaceWeb.GpuHTML do
     ~H"""
     <.header>
       GPU <%= @gpu.id %>
-      <:subtitle>This is a gpu record from your database.</:subtitle>
+      <:subtitle>This is a GPU record from your database.</:subtitle>
       <:actions>
-        <.app_link href={~p"/gpus/#{@gpu}/edit"}>
+        <.link href={~p"/gpus/#{@gpu}/edit"}>
           <.button>Edit GPU</.button>
-        </.app_link>
+        </.link>
       </:actions>
     </.header>
 
     <.list>
       <:item title="Model"><%= @gpu.model %></:item>
       <:item title="Memory"><%= @gpu.memory %> GB</:item>
-      <:item title="Price per hour">$<%= @gpu.price_per_hour %></:item>
+      <:item title="Price per Hour">$<%= @gpu.price_per_hour %></:item>
     </.list>
 
     <.back navigate={~p"/gpus"}>Back to GPUs</.back>
@@ -71,7 +70,7 @@ defmodule GpuMarketplaceWeb.GpuHTML do
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= gpu.memory %> GB</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<%= gpu.price_per_hour %></td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <.app_link href={~p"/gpus/#{gpu.id}/rent"} class="text-indigo-600 hover:text-indigo-900">Rent</.app_link>
+                <.link href={~p"/gpus/#{gpu.id}/rent"} class="text-indigo-600 hover:text-indigo-900">Rent</.link>
               </td>
             </tr>
           <% end %>

@@ -6,15 +6,16 @@ defmodule GpuMarketplace.GPUs.GPU do
     field :model, :string
     field :memory, :integer
     field :price_per_hour, :decimal
+    field :status, :string, default: "available"
 
     timestamps()
   end
 
+  @doc false
   def changeset(gpu, attrs) do
     gpu
-    |> cast(attrs, [:model, :memory, :price_per_hour])
+    |> cast(attrs, [:model, :memory, :price_per_hour, :status])
     |> validate_required([:model, :memory, :price_per_hour])
-    |> validate_number(:memory, greater_than: 0)
-    |> validate_number(:price_per_hour, greater_than: 0)
+    |> validate_inclusion(:status, ["available", "rented"])
   end
 end

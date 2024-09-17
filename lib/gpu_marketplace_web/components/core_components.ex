@@ -4,10 +4,30 @@ defmodule GpuMarketplaceWeb.CoreComponents do
   # import Phoenix.HTML.Link
 
   # Remove the unused alias
-  # alias Phoenix.LiveView.JS
+  alias Phoenix.LiveView.JS
 
   # Add any core components you need here.
   # For example:
+
+  def header(assigns) do
+    ~H"""
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold leading-tight text-gray-900">
+          <%= render_slot(@inner_block) %>
+        </h1>
+        <%= if assigns[:subtitle] do %>
+          <p class="mt-2 text-sm text-gray-700"><%= render_slot(@subtitle) %></p>
+        <% end %>
+        <%= if assigns[:actions] do %>
+          <div class="mt-4">
+            <%= render_slot(@actions) %>
+          </div>
+        <% end %>
+      </div>
+    </header>
+    """
+  end
 
   def button(assigns) do
     assigns =
@@ -72,8 +92,13 @@ defmodule GpuMarketplaceWeb.CoreComponents do
         <h1 class="text-3xl font-bold leading-tight text-gray-900">
           <%= render_slot(@inner_block) %>
         </h1>
+        <%= if assigns[:subtitle] do %>
+          <p class="mt-2 text-sm text-gray-700"><%= render_slot(@subtitle) %></p>
+        <% end %>
         <%= if assigns[:actions] do %>
-          <%= render_slot(@actions) %>
+          <div class="mt-4">
+            <%= render_slot(@actions) %>
+          </div>
         <% end %>
       </div>
     </header>
@@ -247,16 +272,9 @@ defmodule GpuMarketplaceWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
-        <%= for {dt, dd} <- @items do %>
-          <div class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-            <dt class="w-1/4 flex-none text-zinc-500"><%= dt %></dt>
-            <dd class="text-zinc-700"><%= dd %></dd>
-          </div>
-        <% end %>
-      </dl>
-    </div>
+    <ul class="space-y-2">
+      <%= render_slot(@inner_block) %>
+    </ul>
     """
   end
 end

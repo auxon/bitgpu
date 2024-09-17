@@ -1,15 +1,17 @@
 defmodule GpuMarketplace.GPUs do
   alias GpuMarketplace.Repo
   alias GpuMarketplace.GPUs.GPU
+  import Ecto.Query
+  require Logger
 
   def list_gpus do
     Repo.all(GPU)
   end
 
   def list_available_gpus do
-    # For now, we'll just return all GPUs
-    # In a real application, you might want to filter based on availability
-    list_gpus()
+    gpus = Repo.all(from g in GPU, where: g.status == "available")
+    Logger.info("Fetched available GPUs: #{inspect(gpus)}")
+    {:ok, gpus}
   end
 
   def get_gpu(id), do: Repo.get(GPU, id)
