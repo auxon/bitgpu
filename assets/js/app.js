@@ -9,11 +9,9 @@ import { noise } from '@libp2p/noise'
 
 // Update the socket path to match the one defined in endpoint.ex
 let socket = new Socket("/socket", { params: { token: window.userToken } })
-
 socket.connect()
 
 let channel = socket.channel("gpu:lobby", {})
-
 channel.join()
   .receive("ok", resp => { console.log("Joined GPU channel successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
@@ -281,6 +279,15 @@ export function initWebGL(canvasId) {
 // Initialize LiveSocket for LiveView (if you're using it)
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+// Show progress bar on live navigation and form submits
+window.addEventListener("phx:page-loading-start", info => {
+  // Show progress bar or spinner
+})
+
+window.addEventListener("phx:page-loading-stop", info => {
+  // Hide progress bar or spinner
+})
 
 // Connect if there are any LiveViews on the page
 liveSocket.connect()

@@ -42,6 +42,9 @@ defmodule GpuMarketplaceWeb.Router do
     live "/task-status", TaskStatusLive
   end
 
+  # Remove this line:
+  # socket "/socket", GpuMarketplaceWeb.UserSocket
+
   scope "/api", GpuMarketplaceWeb do
     pipe_through :api
 
