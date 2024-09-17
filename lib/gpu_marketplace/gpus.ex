@@ -5,8 +5,8 @@ defmodule GpuMarketplace.Gpus do
 
   import Ecto.Query, warn: false
   alias GpuMarketplace.Repo
-
   alias GpuMarketplace.Gpus.Gpu
+  require Logger  # Add this line to require Logger
 
   def list_gpus do
     Repo.all(Gpu)

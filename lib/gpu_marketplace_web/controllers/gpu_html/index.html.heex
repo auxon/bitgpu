@@ -8,7 +8,7 @@
 </.header>
 
 <.table id="gpus" rows={@gpus} row_click={&JS.navigate(~p"/gpus/#{&1}")}>
-  <:col :let={gpu} label="Model"><%= gpu.model %></:col>
+  <:col :let={gpu} label="Model"><%= gpu.name %></:col>
   <:col :let={gpu} label="Memory"><%= gpu.memory %> GB</:col>
   <:col :let={gpu} label="Price per Hour">$<%= gpu.price_per_hour %></:col>
   <:col :let={gpu} label="Status"><%= gpu.status %></:col>
