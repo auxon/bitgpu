@@ -1,11 +1,6 @@
 defmodule GpuMarketplace.MLTasks do
   alias GpuMarketplace.Repo
   alias GpuMarketplace.MLTasks.Task
-  require Logger  # Add this line to import Logger
-
-  def list_tasks do
-    Repo.all(Task)
-  end
 
   def create_task(attrs \\ %{}) do
     %Task{}
@@ -19,13 +14,7 @@ defmodule GpuMarketplace.MLTasks do
     task
     |> Task.changeset(attrs)
     |> Repo.update()
-    |> case do
-      {:ok, updated_task} ->
-        Logger.info("Task updated successfully: #{inspect(updated_task)}")
-        {:ok, updated_task}
-      {:error, changeset} ->
-        Logger.error("Failed to update task: #{inspect(changeset)}")
-        {:error, changeset}
-    end
   end
+
+  # ... (other CRUD functions as needed)
 end

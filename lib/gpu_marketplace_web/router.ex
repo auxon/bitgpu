@@ -59,6 +59,8 @@ defmodule GpuMarketplaceWeb.Router do
     resources "/ml_tasks", MLTaskController, only: [:create, :show]
     get "/ml_tasks/:id/result", MLTaskController, :view_result
     post "/ml_tasks/submit", MLTaskController, :submit
+
+    post "/ml/execute", MLController, :execute
   end
 
   scope "/api/swagger" do

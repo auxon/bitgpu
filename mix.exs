@@ -51,7 +51,8 @@ defmodule GpuMarketplace.MixProject do
       {:bitcoinex, "~> 0.1.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:msgpax, "~> 2.3"}
     ]
   end
 

@@ -23,9 +23,24 @@ defmodule GpuMarketplaceWeb.GpuChannel do
     end
   end
 
+  def handle_in("execute_ml_operation", payload, socket) do
+    case Msgpax.unpack(payload) do
+      {:ok, %{"operation" => operation, "input_data" => input_data}} ->
+        gpu_id = socket.assigns.gpu_id
+        case P2PManager.execute_ml_operation(gpu_id, operation, input_data) do
+          {:ok, result} ->
+            {:reply, {:ok, Msgpax.pack!(%{result: result})}, socket}
+          {:error, reason} ->
+            {:reply, {:error, Msgpax.pack!(%{reason: reason})}, socket}
+        end
+      {:error, _reason} ->
+        {:reply, {:error, Msgpax.pack!(%{reason: "Invalid MessagePack data"})}, socket}
+    end
+  end
+
   def send_task_to_gpu(gpu_id, task) do
     Logger.info("GpuChannel broadcasting task to GPU: #{gpu_id}, task: #{inspect(task)}")
-    payload = %{task: task}
+    payload = Msgpax.pack!(%{task: task})
     result = GpuMarketplaceWeb.Endpoint.broadcast!("gpu:#{gpu_id}", "execute_task", payload)
     Logger.info("Broadcast result: #{inspect(result)}")
     result

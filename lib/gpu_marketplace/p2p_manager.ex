@@ -48,8 +48,68 @@ defmodule GpuMarketplace.P2PManager do
     {:noreply, state}
   end
 
+  def distribute_ml_task(code) do
+    # Logic to distribute ML task to available GPU nodes
+    # This is a placeholder implementation
+    case find_available_gpu_node() do
+      {:ok, node} ->
+        result = Node.call(node, GpuMarketplace.MLExecutor, :execute, [code])
+        {:ok, result}
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
   defp find_available_gpu do
     # For now, always return success
     {:ok, :mock_gpu_node}
+  end
+
+  defp find_available_gpu_node do
+    # Logic to find an available GPU node
+    # This is a placeholder implementation
+    {:ok, Node.self()}
+  end
+
+  def execute_ml_operation(gpu_id, operation, input_data) do
+    Logger.info("Executing ML operation: #{operation} on GPU: #{gpu_id}")
+    GenServer.call(__MODULE__, {:execute_ml_operation, gpu_id, operation, input_data})
+  end
+
+  def handle_call({:execute_ml_operation, gpu_id, operation, input_data}, _from, state) do
+    case find_available_gpu() do
+      {:ok, _node} ->
+        case MLTasks.create_task(%{
+          gpu_id: gpu_id,
+          operation: operation,
+          status: "pending",
+          parameters: input_data
+        }) do
+          {:ok, task} ->
+            # For now, let's return a mock result
+            mock_result = mock_matrix_multiply(input_data)
+            {:reply, {:ok, mock_result}, state}
+          {:error, changeset} ->
+            Logger.error("Failed to create task: #{inspect(changeset)}")
+            {:reply, {:error, "Failed to create task"}, state}
+        end
+      {:error, reason} ->
+        {:reply, {:error, reason}, state}
+    end
+  end
+
+  # Add this helper function for mock matrix multiplication
+  defp mock_matrix_multiply(%{"matrix_a" => a, "matrix_b" => b}) do
+    rows_a = length(a)
+    cols_b = length(Enum.at(b, 0))
+    cols_a = length(Enum.at(a, 0))
+
+    for i <- 0..(rows_a - 1) do
+      for j <- 0..(cols_b - 1) do
+        Enum.reduce(0..(cols_a - 1), 0, fn k, acc ->
+          acc + Enum.at(Enum.at(a, i), k) * Enum.at(Enum.at(b, k), j)
+        end)
+      end
+    end
   end
 end
