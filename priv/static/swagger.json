@@ -5,20 +5,6 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "ApiHomeResponse": {
-      "description": "Response schema for the API home endpoint",
-      "properties": {
-        "message": {
-          "description": "Welcome message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "message"
-      ],
-      "title": "API Home Response",
-      "type": "object"
-    },
     "GPU": {
       "description": "A GPU available for rent",
       "properties": {
@@ -91,25 +77,6 @@
       "title": "Rental Response",
       "type": "object"
     },
-    "EvaluationResults": {
-      "description": "Results of model evaluation",
-      "properties": {
-        "loss": {
-          "description": "Evaluation loss",
-          "type": "number"
-        },
-        "message": {
-          "description": "Status message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "loss",
-        "message"
-      ],
-      "title": "Evaluation Results",
-      "type": "object"
-    },
     "TrainingResponse": {
       "description": "Response schema for the training process",
       "properties": {
@@ -134,8 +101,42 @@
       ],
       "title": "Training Response",
       "type": "object"
+    },
+    "EvaluationResults": {
+      "description": "Results of model evaluation",
+      "properties": {
+        "loss": {
+          "description": "Evaluation loss",
+          "type": "number"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loss",
+        "message"
+      ],
+      "title": "Evaluation Results",
+      "type": "object"
+    },
+    "ApiHomeResponse": {
+      "description": "Response schema for the API home endpoint",
+      "properties": {
+        "message": {
+          "description": "Welcome message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "API Home Response",
+      "type": "object"
     }
   },
+  "swagger": "2.0",
   "paths": {
     "/": {
       "get": {
@@ -314,6 +315,5 @@
         ]
       }
     }
-  },
-  "swagger": "2.0"
+  }
 }

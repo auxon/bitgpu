@@ -6,3 +6,5 @@
 assets/node_modules/
 deps/bitcoinex/lib/opcode.ex
 .env
+gpu_node/deps/
+gpu_node/_build/

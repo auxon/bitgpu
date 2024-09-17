@@ -17,7 +17,8 @@ config :gpu_marketplace, GpuMarketplaceWeb.Endpoint,
     formats: [html: GpuMarketplaceWeb.ErrorHTML, json: GpuMarketplaceWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: GpuMarketplace.PubSub  # Make sure this line is present
+  pubsub_server: GpuMarketplace.PubSub,
+  live_view: [signing_salt: "oN16khZdAMUAT6nbG6fiZLPcw4f3yXPvxo0XhTS2CP4="]
 
 # Configures Elixir's Logger
 config :logger, :console,

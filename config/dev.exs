@@ -20,7 +20,8 @@ config :gpu_marketplace, GpuMarketplaceWeb.Endpoint,
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ],
-  secret_key_base: "ea3585ee9fe3b27f43ac149962ed2c0d88ddb4e023ee1f4f97e9d064c7222495708098535e991a508e833346ba24540e68e085c31978796ef4e87b12bd11254c"
+  secret_key_base: "ea3585ee9fe3b27f43ac149962ed2c0d88ddb4e023ee1f4f97e9d064c7222495708098535e991a508e833346ba24540e68e085c31978796ef4e87b12bd11254c",
+  websocket: true
 
 # Configure esbuild
 config :esbuild,
