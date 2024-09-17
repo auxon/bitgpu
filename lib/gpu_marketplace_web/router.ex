@@ -26,6 +26,7 @@ defmodule GpuMarketplaceWeb.Router do
     get "/gpus/:id", GpuController, :show
     get "/gpus/:id/edit", GpuController, :edit
     put "/gpus/:id", GpuController, :update
+    patch "/gpus/:id", GpuController, :update
     delete "/gpus/:id", GpuController, :delete
     get "/gpus/:id/rent", GpuController, :rent_form
     post "/gpus/:id/rent", GpuController, :rent

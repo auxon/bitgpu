@@ -1,0 +1,20 @@
+<.simple_form :let={f} for={@changeset} action={@action} method={:post}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+  
+  <%= if @changeset.data.id do %>
+    <input type="hidden" name="_method" value="put" />
+  <% end %>
+
+  <.input field={f[:name]} type="text" label="Name" />
+  <.input field={f[:model]} type="text" label="Model" />
+  <.input field={f[:memory]} type="number" label="Memory (GB)" />
+  <.input field={f[:price_per_hour]} type="number" label="Price per Hour ($)" step="0.01" />
+  <.input field={f[:status]} type="select" label="Status" options={[:available, :rented, :maintenance]} />
+  <.input field={f[:description]} type="text" label="Description" />
+
+  <:actions>
+    <.button type="submit" phx-disable-with="Saving...">Save GPU</.button>
+  </:actions>
+</.simple_form>

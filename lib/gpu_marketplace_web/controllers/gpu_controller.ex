@@ -59,16 +59,26 @@ defmodule GpuMarketplaceWeb.GpuController do
     end
   end
 
+  def edit(conn, %{"id" => id}) do
+    gpu = Gpus.get_gpu!(id)
+    changeset = Gpus.change_gpu(gpu)
+    render(conn, :edit, gpu: gpu, changeset: changeset)
+  end
+
   def update(conn, %{"id" => id, "gpu" => gpu_params}) do
     gpu = Gpus.get_gpu!(id)
 
+    Logger.info("Updating GPU #{id} with params: #{inspect(gpu_params)}")
+
     case Gpus.update_gpu(gpu, gpu_params) do
       {:ok, gpu} ->
+        Logger.info("GPU #{id} updated successfully")
         conn
         |> put_flash(:info, "GPU updated successfully.")
         |> redirect(to: ~p"/gpus/#{gpu}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error("Failed to update GPU #{id}: #{inspect(changeset.errors)}")
         render(conn, :edit, gpu: gpu, changeset: changeset)
     end
   end

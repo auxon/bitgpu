@@ -1,0 +1,8 @@
+<.header>
+  Edit GPU <%= @gpu.id %>
+  <:subtitle>Use this form to manage GPU records in your database.</:subtitle>
+</.header>
+
+<.gpu_form changeset={@changeset} action={~p"/gpus/#{@gpu}"} />
+
+<.back navigate={~p"/gpus"}>Back to GPUs</.back>
