@@ -18,7 +18,8 @@ defmodule GpuNode do
         Logger.info("Executing task: #{inspect(task)}")
         {:ok, result} = GpuNode.TaskExecutor.execute_task(task)
         Logger.info("Task completed with result: #{inspect(result)}")
-        GpuNode.MarketplaceClient.send_result(task.id, result)
+        # Use the string key "id" instead of the atom :id
+        GpuNode.MarketplaceClient.send_result(task["id"], result)
       :empty ->
         Logger.info("No tasks in queue")
     end
