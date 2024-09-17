@@ -11,7 +11,13 @@
   <:col :let={gpu} label="Name"><%= gpu.name %></:col>
   <:col :let={gpu} label="Status"><%= gpu.status %></:col>
   <:col :let={gpu} label="Description"><%= gpu.description %></:col>
-  <:col :let={gpu} label="Connection info"><%= gpu.connection_info %></:col>
+  <:col :let={gpu} label="Connection info">
+    <%= if is_map(gpu.connection_info) do %>
+      IP: <%= gpu.connection_info["ip_address"] %>, Port: <%= gpu.connection_info["port"] %>
+    <% else %>
+      N/A
+    <% end %>
+  </:col>
   <:col :let={gpu} label="Price per hour"><%= gpu.price_per_hour %></:col>
   <:col :let={gpu} label="Model"><%= gpu.model %></:col>
   <:col :let={gpu} label="Memory">
