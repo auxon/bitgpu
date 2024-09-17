@@ -49,7 +49,9 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
               <td><%= task.gpu_id %></td>
               <td>
                 <%= if task.status == "completed" do %>
-                  <button phx-click="view_result" phx-value-id={task.id}>View Result</button>
+                  <button phx-click="view_result" phx-value-id={task.id} id={"view-result-#{task.id}"}>
+                    View Result
+                  </button>
                 <% else %>
                   Waiting...
                 <% end %>
@@ -70,8 +72,22 @@ defmodule GpuMarketplaceWeb.TaskStatusLive do
   end
 
   def handle_event("view_result", %{"id" => id}, socket) do
-    task = MLTasks.get_task!(String.to_integer(id))
-    Logger.info("Viewing result for task #{id}: #{inspect(task)}")
-    {:noreply, assign(socket, selected_task: task)}
+    Logger.info("View Result button clicked for task ID: #{id}")
+    task_id = String.to_integer(id)
+    task = Enum.find(socket.assigns.tasks, &(&1.id == task_id))
+
+    case task do
+      nil ->
+        Logger.error("Task not found: #{task_id}")
+        {:noreply, put_flash(socket, :error, "Task not found")}
+      task ->
+        Logger.info("Viewing result for task #{id}: #{inspect(task)}")
+        {:noreply, assign(socket, selected_task: task)}
+    end
+  end
+
+  def handle_event(event, params, socket) do
+    Logger.warning("Unhandled event: #{event}, params: #{inspect(params)}")
+    {:noreply, socket}
   end
 end

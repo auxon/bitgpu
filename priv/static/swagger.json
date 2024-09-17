@@ -5,28 +5,18 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "RentalResponse": {
-      "description": "Response for a successful GPU rental",
+    "ApiHomeResponse": {
+      "description": "Response schema for the API home endpoint",
       "properties": {
-        "duration": {
-          "description": "Rental duration in minutes",
-          "type": "integer"
-        },
-        "gpu_id": {
-          "description": "ID of the rented GPU",
-          "type": "string"
-        },
-        "transaction_id": {
-          "description": "ID of the payment transaction",
+        "message": {
+          "description": "Welcome message",
           "type": "string"
         }
       },
       "required": [
-        "transaction_id",
-        "duration",
-        "gpu_id"
+        "message"
       ],
-      "title": "Rental Response",
+      "title": "API Home Response",
       "type": "object"
     },
     "GPU": {
@@ -77,18 +67,47 @@
       "title": "GPU Parameters",
       "type": "object"
     },
-    "ApiHomeResponse": {
-      "description": "Response schema for the API home endpoint",
+    "RentalResponse": {
+      "description": "Response for a successful GPU rental",
       "properties": {
-        "message": {
-          "description": "Welcome message",
+        "duration": {
+          "description": "Rental duration in minutes",
+          "type": "integer"
+        },
+        "gpu_id": {
+          "description": "ID of the rented GPU",
+          "type": "string"
+        },
+        "transaction_id": {
+          "description": "ID of the payment transaction",
           "type": "string"
         }
       },
       "required": [
+        "transaction_id",
+        "duration",
+        "gpu_id"
+      ],
+      "title": "Rental Response",
+      "type": "object"
+    },
+    "EvaluationResults": {
+      "description": "Results of model evaluation",
+      "properties": {
+        "loss": {
+          "description": "Evaluation loss",
+          "type": "number"
+        },
+        "message": {
+          "description": "Status message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loss",
         "message"
       ],
-      "title": "API Home Response",
+      "title": "Evaluation Results",
       "type": "object"
     },
     "TrainingResponse": {
@@ -115,28 +134,8 @@
       ],
       "title": "Training Response",
       "type": "object"
-    },
-    "EvaluationResults": {
-      "description": "Results of model evaluation",
-      "properties": {
-        "loss": {
-          "description": "Evaluation loss",
-          "type": "number"
-        },
-        "message": {
-          "description": "Status message",
-          "type": "string"
-        }
-      },
-      "required": [
-        "loss",
-        "message"
-      ],
-      "title": "Evaluation Results",
-      "type": "object"
     }
   },
-  "swagger": "2.0",
   "paths": {
     "/": {
       "get": {
@@ -315,5 +314,6 @@
         ]
       }
     }
-  }
+  },
+  "swagger": "2.0"
 }
